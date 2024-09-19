@@ -6,9 +6,9 @@ import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import tailwindStyles from "../index.css?inline";
-// import supabase from "../supabaseClient";
+import supabase from "../supabaseClient";
 
-export const Widget = () => {
+export const Widget = ({ projectId }) => {
   const [rating, setRating] = useState(3);
   const [submitted, setSubmitted] = useState(false);
 
@@ -20,13 +20,15 @@ export const Widget = () => {
     e.preventDefault();
     const form = e.target;
     const data = {
+      p_project_id: projectId,
       p_user_name: form.name.value,
       p_user_email: form.email.value,
       p_message: form.feedback.value,
       p_rating: rating,
     };
+    const { data: returnedData, error } = await supabase.rpc("add_feedback", data);
     setSubmitted(true);
-    console.log(data);
+    console.log(returnedData);
   };
 
   return (
@@ -102,8 +104,7 @@ export const Widget = () => {
             <Separator className="my-4" />
             <div className="text-gray-600">
               Made by{" "}
-              <a href=""
-                // href="https://nexx-saas.vercel.app/"
+              <a href="https://nandinjindal.onrender.com/"
                 target="_blank"
                 className="text-indigo-600 hover:underline"
               >
